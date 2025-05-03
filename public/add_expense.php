@@ -31,7 +31,7 @@ $success = $_GET['success'] ?? '';
                 <?php endif; ?>
                 <?php if ($success): ?>
                     <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
-                <?php endif; ?>
+                    <?php endif; ?>
             </div>
     
             <form action="../process/add_expense_process.php" method="POST" class="expense-form">
