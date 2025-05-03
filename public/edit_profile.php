@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once '../includes/connection.php';
-require_once '../includes/header.html';
+require_once '../includes/header.php';
 
 if (!isset($_SESSION['username'])) {
     header("Location: login-page.php");

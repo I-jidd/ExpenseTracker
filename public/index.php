@@ -36,7 +36,7 @@ $totalExpenses = array_sum(array_column($expenses, 'amount'));
 $formattedTotalExpenses = number_format($totalExpenses, 2);
 
 // Include header
-include_once '../includes/header.html';
+include_once '../includes/header.php';
 ?>
 
 <main class="main-content">
