@@ -11,6 +11,7 @@
     $username = $_POST['username'];
     $password = $_POST['password'];
 
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT); //hash the password for security
     //check if the username already exists in the database
     $sql = "SELECT * FROM users WHERE username = '$username'";
     $result = $conn->query($sql);
@@ -21,7 +22,7 @@
     }
 
     // Insert new user into the database
-    $sql = "INSERT INTO users (name, last_name, username, password) VALUES ('$name', '$lastname', '$username', '$password')";
+    $sql = "INSERT INTO users (name, last_name, username, password) VALUES ('$name', '$lastname', '$username', '$hashed_password')";
 
     if($conn->query($sql) === TRUE) {
         header('Location: ../public/login-page.php?success=Account created successfully! Please log in.');
