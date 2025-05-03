@@ -23,7 +23,7 @@ $success = $_GET['success'] ?? '';
         <div class="profile-header">
             <h1>Edit Profile</h1>
             <?php if ($error): ?>
-                <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
+                <div class="alert alert-error" style="color: red"><?= htmlspecialchars($error) ?></div>
             <?php endif; ?>
             <?php if ($success): ?>
                 <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>

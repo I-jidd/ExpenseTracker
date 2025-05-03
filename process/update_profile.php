@@ -2,7 +2,6 @@
 session_start();
 require_once '../includes/connection.php';
 
-// Validate logged-in user
 if (!isset($_SESSION['username'])) {
     header("Location: ../public/login-page.php");
     exit();

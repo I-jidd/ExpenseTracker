@@ -56,7 +56,7 @@ $stats = $stmt->get_result()->fetch_assoc();
                     <span class="detail-value"><?= htmlspecialchars($user['username']) ?></span>
                 </div>
             </div>
-            <a href="../process/edit_profile.php" class="btn btn-primary">Edit Profile</a>
+            <a href="edit_profile.php" class="btn btn-primary">Edit Profile</a>
         </div>
 
         <!-- Statistics Section -->

@@ -53,11 +53,11 @@ include_once '../includes/header.html';
             </div>
         </div>
         
+        <div class="section-header">
+            <h2>Expenses for <?= $currentMonth; ?> <?= $currentYear; ?></h2>
+            <a href="add_expense.php" class="btn btn-primary">Add New Expense</a>
+        </div>
         <div class="expenses-section">
-            <div class="section-header">
-                <h2>Expenses for <?= $currentMonth; ?> <?= $currentYear; ?></h2>
-                <a href="add_expense.php" class="btn btn-primary">Add New Expense</a>
-            </div>
             
             <div class="table-container">
                 <table class="expenses-table">
