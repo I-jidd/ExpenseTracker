@@ -1,8 +1,6 @@
 <?php
 session_start();
-
 require_once '../includes/connection.php';
-
 
 // Check if user is logged in
 if (!isset($_SESSION['username'])) {
@@ -10,14 +8,14 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
+// Get current date information
+$currentDate = date("F j, Y");  // Format: "Month day, Year" (e.g., "May 3, 2025")
+$currentMonthNum = date("n");    // Month as number (1-12)
+$currentYearNum = date("Y");     // Year as 4-digit number
 
-// Current user information (static for now)
-$current_user = $_SESSION['username'];
-$currentDate = date("F j, Y");
-$currentMonth = date("F");
-$currentYear = date("Y");
-
-$sql = "SELECT e.*, c.name AS category_name 
+// Fetch expenses for current user and month
+$sql = "SELECT e.id, e.date, e.amount, e.description, 
+               c.name AS category_name 
         FROM expenses e
         JOIN categories c ON e.category_id = c.id
         JOIN users u ON e.user_id = u.id
@@ -27,15 +25,20 @@ $sql = "SELECT e.*, c.name AS category_name
         ORDER BY e.date DESC";
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("sii", $current_user, $currentMonth, $currentYear);
-$stmt->execute();
+$stmt->bind_param("sii", $_SESSION['username'], $currentMonthNum, $currentYearNum);
+
+if (!$stmt->execute()) {
+    die("Query failed: " . $stmt->error);
+}
+
 $expenses = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-
 $totalExpenses = array_sum(array_column($expenses, 'amount'));
-$stmt->close();
 
+// Debug output (comment out in production)
+echo "<!-- Debug: Found " . count($expenses) . " expenses -->\n";
+// echo "<!-- Debug: " . print_r($expenses, true) . " -->"; // Uncomment for full data dump
 
-// Format total expenses with comma for thousands
+// Format total with 2 decimal places
 $formattedTotalExpenses = number_format($totalExpenses, 2);
 
 // Include header
@@ -45,22 +48,22 @@ include_once '../includes/header.html';
 <main class="main-content">
     <div class="container">
         <div class="greeting-section">
-            <h1>Hi, <?= strtoupper($current_user); ?>!</h1>
-            <p class="current-date"><?= $currentDate; ?></p>
+            <h1>Hi, <?= strtoupper(htmlspecialchars($_SESSION['username'])) ?>!</h1>
+            <p class="current-date"><?= $currentDate ?></p>
         </div>
         
         <div class="summary-card">
             <div class="summary-item">
                 <h2>This Month's Expenses</h2>
-                <p class="amount">₱<?= $formattedTotalExpenses; ?></p>
+                <p class="amount">₱<?= $formattedTotalExpenses ?></p>
             </div>
         </div>
         
-        <div class="section-header">
-            <h2>Expenses for <?= $currentMonth; ?> <?= $currentYear; ?></h2>
-            <a href="add_expense.php" class="btn btn-primary">Add New Expense</a>
-        </div>
         <div class="expenses-section">
+            <div class="section-header">
+                <h2>Expenses for <?= date('F') ?> <?= $currentYearNum ?></h2>
+                <a href="add_expense.php" class="btn btn-primary">Add New Expense</a>
+            </div>
             
             <div class="table-container">
                 <table class="expenses-table">
@@ -81,7 +84,7 @@ include_once '../includes/header.html';
                                     <td><?= htmlspecialchars($expense['category_name']) ?></td>
                                     <td><?= htmlspecialchars($expense['description']) ?></td>
                                     <td>₱<?= number_format($expense['amount'], 2) ?></td>
-                                    <td>
+                                    <td class="actions-column">
                                         <a href="edit_expense.php?id=<?= $expense['id'] ?>" class="btn btn-edit">Edit</a>
                                         <a href="delete_expense.php?id=<?= $expense['id'] ?>" class="btn btn-delete">Delete</a>
                                     </td>
