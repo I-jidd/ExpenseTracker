@@ -4,6 +4,7 @@
     header('Location: index.php');
     exit();
   }
+  $error = $_GET['error'] ?? '';
 ?>
 
 <!DOCTYPE html>
@@ -29,12 +30,16 @@
           <h1>Welcome Back</h1>
           <p>Please sign in to your account</p>
         </div>
+        <?php if (!empty($error)): ?>
+            <div class="error-message" id="errorMessage" style="color:red;">
+                <?= htmlspecialchars($error) ?>
+            </div>
+          <?php endif; ?>
 
         <form
           action="../process/login_process.php"
           method="post"
-          class="login-form"
-        >
+          class="login-form">
           <div class="form-group">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" required />
@@ -63,5 +68,19 @@
         </div>
       </div>
     </div>
+  <script>
+        // Auto-hide error message after 3 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const errorMessage = document.getElementById('errorMessage');
+            if (errorMessage) {
+                setTimeout(() => {
+                    errorMessage.style.opacity = '0';
+                    setTimeout(() => {
+                        errorMessage.remove();
+                    }, 500); // Matches the CSS transition time
+                }, 3000); // 3 seconds
+            }
+        });
+    </script>
   </body>
 </html>

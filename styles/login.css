@@ -112,13 +112,10 @@ body {
   font-weight: 500;
 }
 
-/* Responsive adjustments */
-@media (max-width: 480px) {
-  .login-card {
-    padding: 2rem 1.5rem;
-  }
-
-  .login-header h1 {
-    font-size: 1.5rem;
-  }
+.error-message {
+  margin: 1.25px 0;
+  padding-top: 1.25px;
+  background: #ffeeee;
+  border-radius: 0.5px;
+  transition: opacity 0.5s ease;
 }

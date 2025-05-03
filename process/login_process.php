@@ -9,7 +9,6 @@
     $result = $conn->query($sql);
 
     if($result->num_rows > 0){
-        session_start();
         // Fetch the user data
         $row = $result->fetch_assoc();
         $_SESSION['username'] = $row['username'];
