@@ -17,7 +17,9 @@ $user = $stmt->get_result()->fetch_assoc();
 $error = $_GET['error'] ?? '';
 $success = $_GET['success'] ?? '';
 ?>
-
+<head>
+    <title>ExpenseTracker - Edit Profile</title>
+</head>
 <main class="main-content">
     <div class="container">
         <div class="profile-header">

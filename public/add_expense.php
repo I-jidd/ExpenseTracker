@@ -49,6 +49,7 @@ $success = $_GET['success'] ?? '';
                                 <?= htmlspecialchars($category['name']) ?>
                             </option>
                         <?php endforeach; ?>
+                        <option value="new">+ Add New Category</option>
                     </select>
                     <div id="new-category-container" style="display: none; margin-top: 0.5rem;">
                         <input 

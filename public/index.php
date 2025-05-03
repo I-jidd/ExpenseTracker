@@ -2,11 +2,14 @@
 session_start();
 
 require_once '../includes/connection.php';
+
+
 // Check if user is logged in
 if (!isset($_SESSION['username'])) {
     header("Location: login-page.php");
     exit();
 }
+
 
 // Current user information (static for now)
 $current_user = $_SESSION['username'];
