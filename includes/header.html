@@ -24,10 +24,34 @@
             </a>
           </div>
           <ul class="nav-links">
-            <li><a href="index.php" class="active">Home</a></li>
-            <li><a href="profile.php">Profile</a></li>
-            <li><a href="add_expense.php">Add Expense</a></li>
-            <li><a href="categories.php">Categories</a></li>
+            <li>
+              <a
+                href="../public/index.php"
+                class="<?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>"
+                >Home</a
+              >
+            </li>
+            <li>
+              <a
+                href="../public/profile.php"
+                class="<?= basename($_SERVER['PHP_SELF']) == 'profile.php' ? 'active' : '' ?>"
+                >Profile</a
+              >
+            </li>
+            <li>
+              <a
+                href="../public/add_expense.php"
+                class="<?= basename($_SERVER['PHP_SELF']) == 'add_expense.php' ? 'active' : '' ?>"
+                >Add Expense</a
+              >
+            </li>
+            <li>
+              <a
+                href="../public/categories.php"
+                class="<?= basename($_SERVER['PHP_SELF']) == 'categories.php' ? 'active' : '' ?>"
+                >Categories</a
+              >
+            </li>
             <li>
               <a href="../process/logout.php" class="logout-link">Logout</a>
             </li>
