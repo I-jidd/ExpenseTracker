@@ -33,12 +33,6 @@ if (!$stmt->execute()) {
 
 $expenses = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 $totalExpenses = array_sum(array_column($expenses, 'amount'));
-
-// Debug output (comment out in production)
-echo "<!-- Debug: Found " . count($expenses) . " expenses -->\n";
-// echo "<!-- Debug: " . print_r($expenses, true) . " -->"; // Uncomment for full data dump
-
-// Format total with 2 decimal places
 $formattedTotalExpenses = number_format($totalExpenses, 2);
 
 // Include header
@@ -59,12 +53,12 @@ include_once '../includes/header.html';
             </div>
         </div>
         
+        <div class="section-header">
+            <h2>Expenses for <?= date('F') ?> <?= $currentYearNum ?></h2>
+            <a href="add_expense.php" class="btn btn-primary">Add New Expense</a>
+        </div>
+        
         <div class="expenses-section">
-            <div class="section-header">
-                <h2>Expenses for <?= date('F') ?> <?= $currentYearNum ?></h2>
-                <a href="add_expense.php" class="btn btn-primary">Add New Expense</a>
-            </div>
-            
             <div class="table-container">
                 <table class="expenses-table">
                     <thead>
