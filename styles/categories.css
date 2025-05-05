@@ -1,51 +1,140 @@
-/* Add to your existing CSS */
+/* Category Page Styles */
 .category-actions {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
-.search-form input {
-  padding: 0.75rem;
+/* Search Form Container */
+.search-form {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+/* Search Input Group */
+.search-form {
+  position: relative;
+  flex-grow: 1;
+}
+
+.search-form input[type="text"] {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  width: 300px;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.95rem;
+  background-color: var(--bg-light);
+  transition: all 0.2s ease;
 }
 
-.categories-list {
-  display: grid;
-  gap: 0.75rem;
-}
-
-.category-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
+.search-form input[type="text"]:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
   background-color: var(--bg-white);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
 }
 
-.category-name {
+/* Search Icon */
+.search-btn {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.search-icon {
+  width: 1rem;
+  height: 1rem;
+  object-fit: contain;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.search-btn:hover .search-icon {
+  opacity: 1;
+}
+
+/* Add New Button */
+.btn.btn-primary {
+  padding: 0.75rem 1.25rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn.btn-primary:hover {
+  background-color: var(--primary-dark);
+}
+
+.btn.btn-secondary {
+  padding: 0.75rem 1.25rem;
+}
+
+.btn.btn-secondary:hover {
+  background-color: var(--border-color);
+}
+/* Table Styles */
+.table-container {
+  overflow-x: auto;
+  margin-top: 1rem;
+}
+
+.category-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.category-table th {
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  padding: 1rem;
+  text-align: left;
   font-weight: 500;
 }
 
-.category-form {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
+.category-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-medium);
 }
 
-.category-form input {
-  flex-grow: 1;
-  padding: 0.75rem;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-}
-
-.no-categories {
+/* No Data State */
+.no-data {
   text-align: center;
-  color: var(--text-light);
+  color: var(--text-medium);
+  font-size: 1.25rem;
+  font-weight: 500;
   padding: 2rem;
+}
+
+/* Category Form Styles */
+#new-category-form {
+  display: none;
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  background-color: var(--bg-white);
+  box-shadow: var(--shadow-sm);
+  width: 40%;
+}
+
+.category-form input[type="text"] {
+  width: 60%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.category-form .form-actions {
+  display: flex;
+  gap: 0.75rem;
 }
