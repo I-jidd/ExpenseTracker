@@ -21,7 +21,11 @@
                 $token = bin2hex(random_bytes(32));
                 $expiry = time() + (86400 * 7); // 1 week
 
-                $stmt = $conn->prepare('ssi', $token, $expiry, $row['id']);
+                $stmt = $conn->prepare("UPDATE users SET remember_token = ?,
+                                        token_expires_at = FROM_UNIXTIME(?)
+                                        WHERE id = ?");
+
+                $stmt = $conn->bind_param('ssi', $token, $expiry, $row['id']);
                 $stmt->execute();
 
                 setcookie('remember_me', $token, $expiry, "/", true, true);
