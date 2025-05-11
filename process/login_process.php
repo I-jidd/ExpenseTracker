@@ -14,7 +14,18 @@
         // Fetch the user data
         $row = $result->fetch_assoc();
         if(password_verify($password, $row['password'])){
+            $SESSION['user_id'] = $row['id'];
             $_SESSION['username'] = $row['username'];
+
+            if(isset($_POST['remember-me'])){
+                $token = bin2hex(random_bytes(32));
+                $expiry = time() + (86400 * 7); // 1 week
+
+                $stmt = $conn->prepare('ssi', $token, $expiry, $row['id']);
+                $stmt->execute();
+
+                setcookie('remember_me', $token, $expiry, "/", true, true);
+            }
             header('Location: ../public/index.php?login=success');
             exit();
         }
