@@ -1,3 +1,7 @@
+<?php
+  require_once '../process/check_auth.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
