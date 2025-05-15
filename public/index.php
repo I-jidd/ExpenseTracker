@@ -1,12 +1,5 @@
 <?php
-session_start();
-require_once '../includes/connection.php';
-
-// Check if user is logged in
-if (!isset($_SESSION['username'])) {
-    header("Location: login-page.php");
-    exit();
-}
+include_once '../includes/header.php';
 
 // Get current date information
 $currentDate = date("F j, Y");  // Format: "Month day, Year" (e.g., "May 3, 2025")
@@ -36,7 +29,6 @@ $totalExpenses = array_sum(array_column($expenses, 'amount'));
 $formattedTotalExpenses = number_format($totalExpenses, 2);
 
 // Include header
-include_once '../includes/header.php';
 ?>
 
 <main class="main-content">

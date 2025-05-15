@@ -1,13 +1,7 @@
 <?php
-session_start();
-require_once '../includes/connection.php';
 require_once '../includes/header.php';
 
-// Redirect if not logged in
-if (!isset($_SESSION['username'])) {
-    header("Location: login-page.php");
-    exit();
-}
+
 
 // Fetch categories for dropdown
 $stmt = $conn->prepare("SELECT id, name FROM categories");

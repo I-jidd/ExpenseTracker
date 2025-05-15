@@ -1,6 +1,4 @@
 <?php
-session_start();
-require_once '../includes/connection.php';
 $pageTitle = "Categories";
 include_once '../includes/header.php';
 

@@ -52,7 +52,7 @@
 
           <div class="form-options">
             <div class="remember-me">
-              <input type="checkbox" id="remember" name="remember" />
+              <input type="checkbox" id="remember" name="remember-me" />
               <label for="remember">Remember me</label>
             </div>
             <a href="forgot_password.php" class="forgot-password"

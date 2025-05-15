@@ -2,7 +2,7 @@
     session_start();
     require_once '../includes/connection.php';
 
-    if(isset($_SESSION['user_id'])){
+    if(isset($_SESSION['user_id']) && isset($_SESSION['username'])){
         return;
     }
 
@@ -20,13 +20,13 @@
             $_SESSION['username'] = $row['username'];
             
         } else{
-            // Invalid toke -clear the cookie
+            // Invalid token -clear the cookie
             setcookie('remember_me', '', time() - 3600, "/");
             header("Location: ../public/login-page.php");
             exit();
         } 
     } else{
-            header("Location: ../public/login-page.php")
+            header("Location: ../public/login-page.php");
             exit();
         }
 ?>

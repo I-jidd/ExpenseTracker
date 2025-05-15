@@ -1,13 +1,6 @@
 <?php
-session_start();
-require_once '../includes/connection.php';
 require_once '../includes/header.php';
 
-// Redirect if not logged in
-if (!isset($_SESSION['username'])) {
-    header("Location: login-page.php");
-    exit();
-}
 
 // Fetch user data
 $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");

@@ -1,12 +1,5 @@
 <?php
-session_start();
-require_once '../includes/connection.php';
 require_once '../includes/header.php';
-
-if (!isset($_SESSION['username'])) {
-    header("Location: login-page.php");
-    exit();
-}
 
 // Fetch current data
 $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");

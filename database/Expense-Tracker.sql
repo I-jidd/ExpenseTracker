@@ -27,10 +27,6 @@ CREATE TABLE IF NOT EXISTS expenses(
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (category_id) REFERENCES categories(id)
 );
-
--- admin credentials
-INSERT INTO users (name, last_name, username, password) VALUES ('Admin', 'Admin', 'admin', 'admin123');
-
 ALTER TABLE users
     ADD COLUMN remember_token VARCHAR(255) NULL,
     ADD COLUMN token_expires_at DATETIME NULL;

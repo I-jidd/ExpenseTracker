@@ -15,7 +15,6 @@
         $stmt -> execute();
 
         setcookie('remember_me', '', time() - 3600, '/');
-        
 
     }
     header('Location: ../public/login-page.php?logout=success');

@@ -14,7 +14,7 @@
         // Fetch the user data
         $row = $result->fetch_assoc();
         if(password_verify($password, $row['password'])){
-            $SESSION['user_id'] = $row['id'];
+            $_SESSION['user_id'] = $row['id'];
             $_SESSION['username'] = $row['username'];
 
             if(isset($_POST['remember-me'])){
@@ -25,10 +25,15 @@
                                         token_expires_at = FROM_UNIXTIME(?)
                                         WHERE id = ?");
 
-                $stmt = $conn->bind_param('ssi', $token, $expiry, $row['id']);
+                $stmt->bind_param('ssi', $token, $expiry, $row['id']);
                 $stmt->execute();
-
-                setcookie('remember_me', $token, $expiry, "/", true, true);
+                
+                setcookie('remember_me', $token, [
+                    'expires' => $expiry,
+                    'path' => '/',
+                    'secure' => true,      
+                    'httponly' => true,        
+                ]);
             }
             header('Location: ../public/index.php?login=success');
             exit();
