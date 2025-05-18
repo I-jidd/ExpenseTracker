@@ -231,3 +231,38 @@ a:hover {
   border-radius: var(--radius-sm);
   margin-bottom: 1rem;
 }
+
+/* Delete button styles */
+.btn-danger {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Modal styles */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+#deleteModal .modal-content {
+  max-width: 400px;
+  text-align: center;
+}
+
+#deleteModal p {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}

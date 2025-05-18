@@ -76,7 +76,7 @@ $formattedTotalExpenses = number_format($totalExpenses, 2);
                                     <td>₱<?= number_format($expense['amount'], 2) ?></td>
                                     <td class="actions-column">
                                         <button onclick="openEditModal(<?= $expense['id'] ?>)" class="btn btn-edit">Edit</button>
-                                        <a href="delete_expense.php?id=<?= $expense['id'] ?>" class="btn btn-delete">Delete</a>
+                                        <button class="btn btn-delete" data-id="<?= $expense['id'] ?>">Delete</button>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -108,7 +108,7 @@ $formattedTotalExpenses = number_format($totalExpenses, 2);
                         <?php 
                         $categories = $conn->query("SELECT * FROM categories")->fetch_all(MYSQLI_ASSOC);
                         foreach ($categories as $category): ?>
-                            <option value="<?= $category['id'] ?>">
+                            <option value="<?php $category['id'] ?>">
                                 <?= htmlspecialchars($category['name']) ?>
                             </option>
                         <?php endforeach; ?>
@@ -132,14 +132,25 @@ $formattedTotalExpenses = number_format($totalExpenses, 2);
             </form>
         </div>
     </div>
-    <script>
+        <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal" style="display: none;">
+        <div class="modal-content">
+            <h2>Confirm Deletion</h2>
+            <p>Are you sure you want to delete this expense?</p>
+            <div class="form-actions">
+                <button id="confirmDelete" class="btn btn-danger">Delete</button>
+                <button onclick="closeDeleteModal()" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+   <script>
+        let currentExpenseIdToDelete = null;
+
         // Function to open edit modal
         function openEditModal(expenseId) {
-            
             const row = document.querySelector(`tr[data-id="${expenseId}"]`);
             
             if (row) {
-
                 // Set form values
                 document.getElementById('expense_id').value = expenseId;
                 document.getElementById('modal-date').value = row.cells[0].getAttribute('data-date');
@@ -149,8 +160,6 @@ $formattedTotalExpenses = number_format($totalExpenses, 2);
                 
                 // Show modal
                 document.getElementById('expenseModal').style.display = 'flex';
-            } else {
-                console.error("Row not found for ID:", expenseId);
             }
         }
 
@@ -158,11 +167,42 @@ $formattedTotalExpenses = number_format($totalExpenses, 2);
             document.getElementById('expenseModal').style.display = 'none';
         }
 
-        // Close modal when clicking outside
-        document.getElementById('expenseModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+            currentExpenseIdToDelete = null;
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up delete button handlers
+            document.querySelectorAll('.btn-delete').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    currentExpenseIdToDelete = this.getAttribute('data-id') || 
+                                            this.getAttribute('href').split('=')[1];
+                    document.getElementById('deleteModal').style.display = 'flex';
+                });
+            });
+
+            // Confirm delete button
+            document.getElementById('confirmDelete').addEventListener('click', function() {
+                if (currentExpenseIdToDelete) {
+                    window.location.href = `../process/delete_expense.php?id=${currentExpenseIdToDelete}`;
+                }
+            });
+
+            // Close modals when clicking outside
+            document.getElementById('expenseModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+
+            document.getElementById('deleteModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeDeleteModal();
+                }
+            });
         });
     </script>
 </main>
