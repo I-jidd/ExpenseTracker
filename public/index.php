@@ -65,7 +65,7 @@ $formattedTotalExpenses = number_format($totalExpenses, 2);
                     <tbody>
                         <?php if (count($expenses) > 0): ?>
                             <?php foreach ($expenses as $expense): ?>
-                                <tr>
+                                <tr data-id ="<?= $expense['id'] ?>">
                                     <td data-date="<?= date('Y-m-d', strtotime($expense['date'])) ?>">
                                         <?= date("M d, Y", strtotime($expense['date'])) ?>
                                     </td>
@@ -75,7 +75,7 @@ $formattedTotalExpenses = number_format($totalExpenses, 2);
                                     <td><?= htmlspecialchars($expense['description']) ?></td>
                                     <td>₱<?= number_format($expense['amount'], 2) ?></td>
                                     <td class="actions-column">
-                                        <a href="edit_expense.php?id=<?= $expense['id'] ?>" class="btn btn-edit">Edit</a>
+                                        <button onclick="openEditModal(<?= $expense['id'] ?>)" class="btn btn-edit">Edit</button>
                                         <a href="delete_expense.php?id=<?= $expense['id'] ?>" class="btn btn-delete">Delete</a>
                                     </td>
                                 </tr>
@@ -90,95 +90,79 @@ $formattedTotalExpenses = number_format($totalExpenses, 2);
             </div>
         </div>
     </div>
-    <div class="class-overlay" id="edit-expense-modal" style="display: none;">
+    <div class="modal-overlay" id="expenseModal" style="display: none;">
         <div class="modal-content">
-            <span class="class-modal" onclick="closeModal()">&times;</span>
+            <span class="close-modal" onclick="closeModal()">&times;</span>
             <h2>Edit Expense</h2>
+            <form id="expenseForm" method="POST" action="../process/update_expense.php">
+                <input type="hidden" name="id" id="expense_id">
+                
+                <div class="form-group">
+                    <label for="modal-date">Date</label>
+                    <input type="date" id="modal-date" name="date" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="modal-category">Category</label>
+                    <select id="modal-category" name="category_id" class="form-input" required>
+                        <?php 
+                        $categories = $conn->query("SELECT * FROM categories")->fetch_all(MYSQLI_ASSOC);
+                        foreach ($categories as $category): ?>
+                            <option value="<?= $category['id'] ?>">
+                                <?= htmlspecialchars($category['name']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="modal-description">Description</label>
+                    <input type="text" id="modal-description" name="description" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="modal-amount">Amount (₱)</label>
+                    <input type="number" id="modal-amount" name="amount" min="0.01" step="0.01" class="form-input" required>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
         </div>
-        <form id="edit-expense-form" class="expense-form">
-            <input type="hidden" id="edit-expense-id">
-            <div class="form-group">
-                <label for="edit-date">Date</label>
-                <input type="date" id="edit-date" name="date" required>
-            </div>
-            <div class="form-group">
-                <label for="edit-category">Category</label>
-                <select id="edit-category" name="category_id" required>
-                    <?php 
-                    $categories = $conn->query("SELECT * FROM categories")->fetch_all(MYSQLI_ASSOC);
-                    foreach ($categories as $category): ?>
-                        <option value="<?= $category['id'] ?>">
-                            <?= htmlspecialchars($category['name']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="edit-description">Description</label>
-                <input type="text" id="edit-description" name="description" required>
-            </div>
-            <div class="form-group">
-                <label for="edit-amount">Amount (₱)</label>
-                <input type="number" id="edit-amount" name="amount" min="0.01" step="0.01" required>
-            </div>
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Save Changes</button>
-                <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-            </div>
-        </form>
     </div>
     <script>
-        function openEditModal(expenseId, date, categoryId, description, amount){
-            document.getElementById('edit-expense-id').value = expenseId;
-            document.getElementById('edit-date').value = date;
-            document.getElementById('edit-category').value = categoryId;
-            document.getElementById('edit-description').value = description;
-            document.getElementById('edit-amount').value = amount;
+        // Function to open edit modal
+        function openEditModal(expenseId) {
             
-            document.getElementById('edit-expense-modal').style.display = 'block';
-        }
-        function closeModal(){
-            document.getElementById('edit-expense-modal').style = 'flex';
-        }
-        
-        document.getElementById('edit-expense-form').addEventListener('submit', function(e){
-            e.preventDefault();
+            const row = document.querySelector(`tr[data-id="${expenseId}"]`);
             
-            const formData = new FormData(this);
-            formData.append('expense_id', document.getElementById('edit-expense-id').value);
+            if (row) {
 
-            fetch('../process/update_expense.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Expense updated successfully!');
-                    window.location.reload();
-                } else {
-                    alert('Error updating expense: ' + data.error);
-                }
-            })
-            .catch(error =>{
-                console.error('Error:', error);
-            })
-        });
-        document.querySelectorAll('.btn-edit').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const row = this.closest('tr');
-                const expenseId = this.getAttribute('href').split('=')[1];
-                const date = row.cells[0].getAttribute('data-date'); // Add data-date attribute to your date cell
-                const category = row.cells[1].textContent;
-                const description = row.cells[2].textContent;
-                const amount = row.cells[3].textContent.replace('₱', '').replace(',', '');
+                // Set form values
+                document.getElementById('expense_id').value = expenseId;
+                document.getElementById('modal-date').value = row.cells[0].getAttribute('data-date');
+                document.getElementById('modal-category').value = row.cells[1].getAttribute('data-category-id');
+                document.getElementById('modal-description').value = row.cells[2].textContent.trim();
+                document.getElementById('modal-amount').value = row.cells[3].textContent.replace('₱', '').replace(',', '').trim();
                 
-                // You'll need to get categoryId from somewhere - could add data-category-id to the row
-                const categoryId = row.cells[1].getAttribute('data-category-id');
-                
-                openEditModal(expenseId, date, categoryId, description, amount);
-            });
+                // Show modal
+                document.getElementById('expenseModal').style.display = 'flex';
+            } else {
+                console.error("Row not found for ID:", expenseId);
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('expenseModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('expenseModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
         });
     </script>
 </main>
