@@ -12,6 +12,7 @@ $success = $_GET['success'] ?? '';
 ?>
 <head>
     <title>ExpenseTracker - Edit Profile</title>
+    <link rel="stylesheet" href="../styles/edit_profile.css">
 </head>
 <main class="main-content">
     <div class="container">
