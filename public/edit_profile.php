@@ -39,6 +39,19 @@ $success = $_GET['success'] ?? '';
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" value="<?= htmlspecialchars($user['username']) ?>" required>
             </div>
+            <div class="form-group">
+                <label for="current_password">Current Password (leave blank to keep current)</label>
+                <input type="password" id="current_password" name="current_password">
+            </div>
+            <div class="form-group">
+                <label for="new_password">New Password</label>
+                <input type="password" id="new_password" name="new_password">
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm New Password</label>
+                <input type="password" id="confirm_password" name="confirm_password">
+            </div>
+            
             <button type="submit" class="btn btn-primary">Save Changes</button>
             <a href="profile.php" class="btn btn-secondary">Cancel</a>
         </form>

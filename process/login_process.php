@@ -38,6 +38,10 @@
             header('Location: ../public/index.php?login=success');
             exit();
         }
+        else{
+            header('Location: ../public/login-page.php?error=Invalid username or password!');
+            exit();
+        }
     }
     else{
         header('Location: ../public/login-page.php?error=Invalid username or password!');
