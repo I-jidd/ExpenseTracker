@@ -44,7 +44,7 @@
           class="signup-form"
         >
           <div class="form-group">
-            <label for="name">Name</label>
+            <label for="name">First name</label>
             <input type="text" id="name" name="name" required />
           </div>
           <div class="form-group">

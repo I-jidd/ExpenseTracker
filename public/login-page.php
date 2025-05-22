@@ -5,6 +5,7 @@
     exit();
   }
   $error = $_GET['error'] ?? '';
+  $success = $_GET['success'] ?? '';
 ?>
 
 <!DOCTYPE html>
@@ -30,11 +31,18 @@
           <h1>Welcome Back</h1>
           <p>Please sign in to your account</p>
         </div>
+        
         <?php if (!empty($error)): ?>
-            <div class="error-message" id="errorMessage" style="color:red;">
+            <div class="error-message" id="errorMessage">
                 <?= htmlspecialchars($error) ?>
             </div>
-          <?php endif; ?>
+        <?php endif; ?>
+
+        <?php if (!empty($success)): ?>
+            <div class="success-message" id="successMessage">
+                <?= htmlspecialchars($success) ?>
+            </div>
+        <?php endif; ?>
 
         <form
           action="../process/login_process.php"
@@ -69,16 +77,27 @@
       </div>
     </div>
   <script>
-        // Auto-hide error message after 3 seconds
+        // Auto-hide messages after 5 seconds
         document.addEventListener('DOMContentLoaded', function() {
             const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            
             if (errorMessage) {
                 setTimeout(() => {
                     errorMessage.style.opacity = '0';
                     setTimeout(() => {
                         errorMessage.remove();
-                    }, 500); // Matches the CSS transition time
-                }, 3000); // 3 seconds
+                    }, 500);
+                }, 5000);
+            }
+            
+            if (successMessage) {
+                setTimeout(() => {
+                    successMessage.style.opacity = '0';
+                    setTimeout(() => {
+                        successMessage.remove();
+                    }, 500);
+                }, 5000);
             }
         });
     </script>

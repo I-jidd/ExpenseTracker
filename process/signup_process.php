@@ -6,6 +6,10 @@
         header('Location: ../public/signup-page.php?error=Passwords do not match!');
         exit();
     }
+    if(strlen($_POST['password']) < 8){
+    header('Location: ../public/signup-page.php?error=Password must be at least 8 characters long!');
+    exit();
+    }   
     $name = $_POST['name'];
     $lastname = $_POST['lastname'];
     $username = $_POST['username'];

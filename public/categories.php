@@ -2,8 +2,15 @@
 $pageTitle = "Categories";
 include_once '../includes/header.php';
 
-// Fetch all categories
-$stmt = $conn->prepare("SELECT * FROM categories ORDER BY name ASC");
+// Get user ID
+$stmt = $conn->prepare("SELECT id FROM users WHERE username = ?");
+$stmt->bind_param("s", $_SESSION['username']);
+$stmt->execute();
+$user = $stmt->get_result()->fetch_assoc();
+
+// Fetch categories for current user only
+$stmt = $conn->prepare("SELECT * FROM categories WHERE user_id = ? ORDER BY name ASC");
+$stmt->bind_param("i", $user['id']);
 $stmt->execute();
 $categories = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
@@ -58,9 +65,9 @@ $isSearchActive = isset($_GET['search']) && !empty($_GET['search']);
                 <tbody>
                     <?php
                     if(isset($_GET['search']) && $search = htmlspecialchars($_GET['search'])){
-                        $stmt = $conn->prepare("SELECT * FROM categories WHERE name LIKE ? ORDER BY name ASC");
+                        $stmt = $conn->prepare("SELECT * FROM categories WHERE name LIKE ? AND user_id = ? ORDER BY name ASC");
                         $searchTerm = "%$search%";
-                        $stmt->bind_param("s", $searchTerm);
+                        $stmt->bind_param("si", $searchTerm, $user['id']);
                         $stmt->execute();
                         $categories = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                     }

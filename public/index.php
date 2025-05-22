@@ -8,7 +8,7 @@ $currentYearNum = date("Y");     // Year as 4-digit number
 
 // Fetch expenses for current user and month
 $sql = "SELECT e.id, e.date, e.amount, e.description, 
-               c.name AS category_name 
+               c.name AS category_name, c.id AS category_id
         FROM expenses e
         JOIN categories c ON e.category_id = c.id
         JOIN users u ON e.user_id = u.id
@@ -28,7 +28,17 @@ $expenses = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 $totalExpenses = array_sum(array_column($expenses, 'amount'));
 $formattedTotalExpenses = number_format($totalExpenses, 2);
 
-// Include header
+// Get user ID for category dropdown in modal
+$stmt = $conn->prepare("SELECT id FROM users WHERE username = ?");
+$stmt->bind_param("s", $_SESSION['username']);
+$stmt->execute();
+$user = $stmt->get_result()->fetch_assoc();
+
+// Fetch user's categories for modal
+$stmt = $conn->prepare("SELECT * FROM categories WHERE user_id = ? ORDER BY name ASC");
+$stmt->bind_param("i", $user['id']);
+$stmt->execute();
+$categories = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <main class="main-content">
@@ -69,7 +79,7 @@ $formattedTotalExpenses = number_format($totalExpenses, 2);
                                     <td data-date="<?= date('Y-m-d', strtotime($expense['date'])) ?>">
                                         <?= date("M d, Y", strtotime($expense['date'])) ?>
                                     </td>
-                                    <td data-category-id="<?= $expense['id'] ?>">
+                                    <td data-category-id="<?= $expense['category_id'] ?>">
                                         <?= htmlspecialchars($expense['category_name']) ?>
                                     </td>
                                     <td><?= htmlspecialchars($expense['description']) ?></td>
@@ -105,10 +115,8 @@ $formattedTotalExpenses = number_format($totalExpenses, 2);
                 <div class="form-group">
                     <label for="modal-category">Category</label>
                     <select id="modal-category" name="category_id" class="form-input" required>
-                        <?php 
-                        $categories = $conn->query("SELECT * FROM categories")->fetch_all(MYSQLI_ASSOC);
-                        foreach ($categories as $category): ?>
-                            <option value="<?php $category['id'] ?>">
+                        <?php foreach ($categories as $category): ?>
+                            <option value="<?= $category['id'] ?>">
                                 <?= htmlspecialchars($category['name']) ?>
                             </option>
                         <?php endforeach; ?>

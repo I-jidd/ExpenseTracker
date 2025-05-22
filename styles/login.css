@@ -112,10 +112,24 @@ body {
   font-weight: 500;
 }
 
-.error-message {
-  margin: 1.25px 0;
-  padding-top: 1.25px;
-  background: #ffeeee;
-  border-radius: 0.5px;
+/* Message styling */
+.error-message,
+.success-message {
+  margin: 1.25rem 0;
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
   transition: opacity 0.5s ease;
+  text-align: center;
+}
+
+.error-message {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.success-message {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
 }

@@ -1,10 +1,15 @@
 <?php
 require_once '../includes/header.php';
 
+// Get user ID
+$stmt = $conn->prepare("SELECT id FROM users WHERE username = ?");
+$stmt->bind_param("s", $_SESSION['username']);
+$stmt->execute();
+$user = $stmt->get_result()->fetch_assoc();
 
-
-// Fetch categories for dropdown
-$stmt = $conn->prepare("SELECT id, name FROM categories");
+// Fetch categories for current user only
+$stmt = $conn->prepare("SELECT id, name FROM categories WHERE user_id = ? ORDER BY name ASC");
+$stmt->bind_param("i", $user['id']);
 $stmt->execute();
 $categories = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
@@ -25,7 +30,7 @@ $success = $_GET['success'] ?? '';
                 <?php endif; ?>
                 <?php if ($success): ?>
                     <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
-                    <?php endif; ?>
+                <?php endif; ?>
             </div>
     
             <form action="../process/add_expense_process.php" method="POST" class="expense-form">
