@@ -63,3 +63,66 @@
   background-color: #dcfce7;
   color: #166534;
 }
+
+/* Save Confirmation Modal Styles */
+#saveModal .modal-content {
+  max-width: 500px;
+}
+
+#changesSummary {
+  margin-bottom: 1.5rem;
+}
+
+#changesSummary p {
+  margin-bottom: 1rem;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+#changesList {
+  background-color: var(--bg-light);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  margin: 0;
+  list-style: none;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+#changesList li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-medium);
+  font-size: 0.9rem;
+}
+
+#changesList li:last-child {
+  border-bottom: none;
+}
+
+#changesList li:before {
+  content: "• ";
+  color: var(--primary-color);
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+/* Warning styles for validation issues */
+#changesList li[style*="color"] {
+  font-weight: 500;
+}
+
+#changesList li[style*="color"]:before {
+  content: "⚠️ ";
+  margin-right: 0.5rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.form-actions .btn {
+  min-width: 120px;
+}

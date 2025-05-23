@@ -78,7 +78,7 @@ $isSearchActive = isset($_GET['search']) && !empty($_GET['search']);
                                 <td><?= htmlspecialchars($category['name']) ?></td>
                                 <td>
                                     <a href="../process/edit_category.php?id=<?= $category['id'] ?>" class="btn btn-edit">Edit</a>
-                                    <a href="../process/delete_category.php?id=<?= $category['id'] ?>" class="btn btn-delete">Delete</a>
+                                    <button class="btn btn-delete" data-id="<?= $category['id'] ?>" data-name="<?= htmlspecialchars($category['name']) ?>">Delete</button>
                                 </td>
                             </tr>
                         <?php endforeach;
@@ -93,12 +93,26 @@ $isSearchActive = isset($_GET['search']) && !empty($_GET['search']);
     </div>
 </main>
 
+<!-- Delete Confirmation Modal -->
+<div class="modal-overlay" id="deleteModal" style="display: none;">
+    <div class="modal-content">
+        <h2>Confirm Deletion</h2>
+        <p id="deleteMessage">Are you sure you want to delete this category?</p>
+        <div class="form-actions">
+            <button id="confirmDelete" class="btn btn-danger">Delete</button>
+            <button onclick="closeDeleteModal()" class="btn btn-secondary">Cancel</button>
+        </div>
+    </div>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const addBtn = document.getElementById('add-category-btn');
     const cancelBtn = document.getElementById('cancel-add');
     const formContainer = document.getElementById('new-category-form');
+    let currentCategoryIdToDelete = null;
 
+    // Add category form toggle
     if (addBtn && cancelBtn && formContainer) {
         addBtn.addEventListener('click', function(e) {
             e.preventDefault();
@@ -109,6 +123,44 @@ document.addEventListener('DOMContentLoaded', function() {
             formContainer.style.display = 'none';
         });
     }
+
+    // Delete confirmation functionality
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+        currentCategoryIdToDelete = null;
+    }
+
+    // Set up delete button handlers
+    document.querySelectorAll('.btn-delete').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            currentCategoryIdToDelete = this.getAttribute('data-id');
+            const categoryName = this.getAttribute('data-name');
+            
+            // Update the modal message with category name
+            document.getElementById('deleteMessage').textContent = 
+                `Are you sure you want to delete the category "${categoryName}"?`;
+            
+            document.getElementById('deleteModal').style.display = 'flex';
+        });
+    });
+
+    // Confirm delete button
+    document.getElementById('confirmDelete').addEventListener('click', function() {
+        if (currentCategoryIdToDelete) {
+            window.location.href = `../process/delete_category.php?id=${currentCategoryIdToDelete}`;
+        }
+    });
+
+    // Close modal when clicking outside
+    document.getElementById('deleteModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeDeleteModal();
+        }
+    });
+
+    // Make closeDeleteModal available globally
+    window.closeDeleteModal = closeDeleteModal;
 });
 </script>
 
